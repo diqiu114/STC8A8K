@@ -1,0 +1,13 @@
+格式化输出时,unsigned char为%bu 有符号的为%bx
+格式化输出时,unsigned int为%u
+
+成员如何实现格式化输出:
+void demo(const char* str){
+	va_list ap			//定义一个char*
+	char string[32] = {0};	//存放字符串,最对32个
+	va_start(ap,str);		//指针指向第一个不定参
+	vsprintf(string,str,ap);	//将*str放进str中
+	//添加输出字符串的函数	
+	va_end(ap);		//ap指向NULL
+}
+

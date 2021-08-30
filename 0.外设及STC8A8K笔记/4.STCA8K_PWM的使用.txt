@@ -1,0 +1,59 @@
+STC8A系列支持硬件PWM设置流程如下:
+1.P_SW2 |= 0x80;(使能访问扩展RAM区域寄存器)
+2.设置时钟源
+3.设置PWM周期
+4.设置输出低电平的计数位置
+5.设置输出高电平的计数位置
+6.选择引脚
+7.使能PWMn输出
+8.P_SW2 |= 0x00;(关闭)
+9.启动PWM模块
+
+配置寄存器流程:
+
+PWM使用涉及的一些寄存器有:P_SW2 |= 0x80-> PWMCFG-> PWMIF-> PWMFDCR-> PWMCKS
+-> PWMC-> PWMnT1,PWMnT2-> PWMnCR-> PWMCR-> P_SW2 &= ~0x80
+
+PWMCFG:增强型 PWM 配置寄存器
+B7:CBIF  PWM 计数器归零中断标志位,溢出置1,软件清零
+B5:ETADC PWM 是否与 ADC 关联
+
+PWMIF:PWM 中断标志寄存器
+CnIF：第 n 通道 PWM 的中断标志位,当所设置的触发点
+发生中断事件时,硬件置1,软件清零
+
+PWMFDCR:PWM 异常检测控制寄存器
+详情见手册
+
+PWMCR:PWM 控制寄存器
+B7:ENPWM：使能增强型 PWM 波形发生器
+注意:使能便开始计数,重复失能,使能从零开始重新计数
+B6:ECBI: PWM 计数器归零中断使能位,失能后CBIF任会硬件置1
+
+PWMCH，PWMCL: PWM 计数器寄存器
+用于设定PWM计数周期,到达设定值,重新计数
+
+PWMCKS: PWM 时钟选择寄存器
+
+B4: SELT2:PWM 时钟源选择
+0:PWM 时钟源为系统时钟经分频器分频之后的时钟
+1:PWM 时钟源为定时器 2 的溢出脉冲
+
+PWM_PS[3:0]:系统时钟预分频参数
+详情见手册
+
+PWMnT1: PWM 的内部计数值与所设置的 T1 的值相等输出低电平
+PWMnT2: PWM 的内部计数值与所设置的 T2 的值相等输出高电平
+
+PWMnCR:PWM 通道控制寄存器
+B7: ENCnO：PWM 输出使能位(0为GPIO,1为PWM波形发生器控制)
+B6: CnINI：设置 PWM 输出端口的初始电平
+B4,B3:Cn_S[1:0]：PWM 输出功能脚切换选择，请参考功能脚切换章节
+B2: ECnI：第 n 通道的 PWM 中断使能控制位(1使能)
+B1: ECnT2SI：第 n 通道的 PWM 在第 2 个触发点中断使能控制位(1使能)
+B0: ECnT1SI：第 n 通道的 PWM 在第 1 个触发点中断使能控制位(1使能)
+
+PWMnHLD:通道电平保持控制寄存器(1使能)
+B1: HCnH：第 n 通道 PWM 强制输出高电平控制位
+B0: HCnL：第 n 通道 PWM 强制输出低电平控制位
+

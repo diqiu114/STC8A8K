@@ -1,0 +1,33 @@
+STC8A8K_ADC概述:
+注意:一旦ADC打开,对应的IO口就会变成高阻模式
+
+ADC_CONTR:ADC 控制寄存器
+	其中:ADC_POWER:ADC电源控制
+	(打开后等待1ms让电源稳定,适当加长对外部信号
+	的采样时间，就是对 ADC 内部采样保持电容的充
+	电或放电时间,时间够，内部才能和外部电势相等)
+
+	ADC_START:ADC 转换启动控制位,写1开始ADC转换,
+	转换完成后硬件清零
+
+	ADC_FLAG:ADC转换结束位,硬件置1,申请中断,软件清零
+
+	ADC_CHS:ADC模拟通道检测位
+
+
+ADCCFG:ADC 配置寄存器
+	其中:RESFMT:ADC 转换结果格式控制位
+	(0:结果左对齐 1:结果右对齐)
+
+	SPEED:ADC 时钟控制
+	（FADC＝SYSclk/2/16/（SPEED[3:0]+1））
+	所以最高为:SYSclk/2/16/16:
+
+
+ADC_RES，ADC_RESL:ADC 转换结果寄存器
+	12位结果自动保存到这里面
+
+
+
+
+
